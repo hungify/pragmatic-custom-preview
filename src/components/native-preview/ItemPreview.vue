@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { TItem } from "../shared";
+import { TItem } from "../../shared";
 
 const props = defineProps<{
   item: TItem;

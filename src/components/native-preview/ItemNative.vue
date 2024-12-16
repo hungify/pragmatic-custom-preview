@@ -8,7 +8,7 @@ import {
 import { DraggableState, TItem } from "../../shared";
 import { preserveOffsetOnSource } from "@atlaskit/pragmatic-drag-and-drop/element/preserve-offset-on-source";
 import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
-import ItemPreview from "../ItemPreview.vue";
+import ItemPreview from "./ItemPreview.vue";
 
 const props = defineProps<{
   item: TItem;

@@ -2,7 +2,6 @@
 import { computed, ref } from "vue";
 import { useDraggable } from "../../composables/useDraggable";
 import { TItem } from "../../shared";
-import ItemPreview from "../ItemPreview.vue";
 
 const props = defineProps<{
   item: TItem;
@@ -13,7 +12,7 @@ const props = defineProps<{
 const itemRef = ref<HTMLElement | null>(null);
 const isItemPinned = computed(() => props.item.pinned);
 
-const { state, preview, previewElement } = useDraggable({
+const { state, TeleportedPreview } = useDraggable({
   element: itemRef,
   getInitialData: () => ({ item: props.item, instanceId: props.instanceId }),
   getData: () => ({ item: props.item, instanceId: props.instanceId }),
@@ -45,24 +44,7 @@ const { state, preview, previewElement } = useDraggable({
       class="item-image"
     />
     <span v-else>{{ props.item.title }}</span>
-    <teleport to="body" v-if="preview">
-      <div
-        ref="previewElement"
-        :style="{
-          position: 'fixed',
-          width: `${preview.bounds.width}px`,
-          height: `${preview.bounds.height}px`,
-          pointerEvents: 'none',
-          willChange: 'transform',
-          zIndex: 1000,
-          top: 0,
-          left: 0,
-          transform: `translate(${preview.bounds.left}px, ${preview.bounds.top}px)`,
-        }"
-      >
-        <ItemPreview :item="props.item" :showImage="props.showImage" />
-      </div>
-    </teleport>
+    <TeleportedPreview previewClass="item-preview" />
   </div>
 </template>
 
@@ -110,5 +92,11 @@ const { state, preview, previewElement } = useDraggable({
   border-radius: 50%;
   /* Workaround to make `image` not draggable. */
   pointer-events: none;
+}
+</style>
+
+<style>
+.item-preview {
+  transform: rotate(4deg);
 }
 </style>
