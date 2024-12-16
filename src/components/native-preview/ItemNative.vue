@@ -58,7 +58,6 @@ onMounted(() => {
     dropTargetForElements({
       element: itemRef.value,
       getData: () => ({ item: props.item, instanceId: props.instanceId }),
-      getIsSticky: () => true,
       canDrop: ({ source }) => {
         if (source.element === itemRef.value) return false;
 
@@ -90,17 +89,17 @@ onMounted(() => {
       class="item-image"
     />
     <span v-else>{{ props.item.title }}</span>
+    <teleport v-if="previewState" :to="previewState.container">
+      <div
+        :style="{
+          width: `${previewState.rect.width}px`,
+          height: `${previewState.rect.height}px`,
+        }"
+      >
+        <ItemPreview :item="props.item" :showImage="props.showImage" />
+      </div>
+    </teleport>
   </div>
-  <teleport v-if="previewState" :to="previewState.container">
-    <div
-      :style="{
-        width: `${previewState.rect.width}px`,
-        height: `${previewState.rect.height}px`,
-      }"
-    >
-      <ItemPreview :item="props.item" :showImage="props.showImage" />
-    </div>
-  </teleport>
 </template>
 
 <style scoped>
@@ -124,7 +123,6 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: grab;
 }
 
 .item-idle:hover {

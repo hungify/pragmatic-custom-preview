@@ -73,13 +73,15 @@ onMounted(() => {
     ref="listRef"
     :class="{ 'list-scroll': props.scrollMode === 'list' }"
   >
-    <template v-for="item in props.items" :key="item?.value">
+    <transition-group name="list" tag="div" class="list">
       <ItemCustom
+        v-for="item in props.items"
         :item="item"
         :instanceId="props.instanceId"
         :showImage="props.showImage"
+        :key="item.id"
       />
-    </template>
+    </transition-group>
   </div>
 </template>
 
