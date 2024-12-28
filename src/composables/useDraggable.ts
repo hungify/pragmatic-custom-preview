@@ -2,6 +2,7 @@ import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import type {
   AllDragTypes,
   BaseEventPayload,
+  CleanupFn,
   DropTargetGetFeedbackArgs,
   ElementDragType,
   Input,
@@ -11,44 +12,25 @@ import {
   dropTargetForElements,
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { disableNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/disable-native-drag-preview";
+import { preventUnhandled } from "@atlaskit/pragmatic-drag-and-drop/prevent-unhandled";
 import {
   defineComponent,
   h,
   MaybeRefOrGetter,
   onMounted,
+  onUnmounted,
   ref,
   StyleValue,
   Teleport,
   toValue,
   watchEffect,
 } from "vue";
-import { DraggableState } from "../shared";
-import { preventUnhandled } from "@atlaskit/pragmatic-drag-and-drop/prevent-unhandled";
-
-// Lib doesn't export these types, so we need to define them ourselves
-type DraggableGetFeedbackArgs = {
-  /**
-   * The user input as a drag is trying to start (the `initial` input)
-   */
-  input: Input;
-  /**
-   * The `draggable` element
-   */
-  element: HTMLElement;
-  /**
-   * The `dragHandle` element for the `draggable`
-   */
-  dragHandle: Element | null;
-};
-interface DraggablePreview {
-  element: HTMLElement;
-  bounds: DOMRect;
-}
-
-interface DraggableOffset {
-  x: number;
-  y: number;
-}
+import {
+  DraggableGetFeedbackArgs,
+  DraggableOffset,
+  DraggablePreview,
+  DraggableState,
+} from "../shared/draggable";
 
 interface DraggableOptions<
   TElement extends HTMLElement,
@@ -77,6 +59,8 @@ const draggablePreviewStyles: StyleValue = {
 export const useDraggable = <TElement extends HTMLElement>(
   options: DraggableOptions<TElement>
 ) => {
+  let cleanup: CleanupFn | null = null;
+
   const state = ref<DraggableState>("idle");
   const pointer = ref<Input | null>(null);
   const offset = ref<DraggableOffset | null>(null);
@@ -94,7 +78,7 @@ export const useDraggable = <TElement extends HTMLElement>(
     const element = toValue(options.element);
     if (!element) return;
 
-    combine(
+    cleanup = combine(
       draggable({
         element,
         getInitialData: options.getInitialData,
@@ -206,8 +190,13 @@ export const useDraggable = <TElement extends HTMLElement>(
     },
   });
 
+  onUnmounted(() => {
+    cleanup?.();
+  });
+
   return {
     state,
     TeleportedPreview,
+    cleanup,
   };
 };

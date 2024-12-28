@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, useTemplateRef } from "vue";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import {
   draggable,
   dropTargetForElements,
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { DraggableState, TItem } from "../../shared";
 import { preserveOffsetOnSource } from "@atlaskit/pragmatic-drag-and-drop/element/preserve-offset-on-source";
 import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
+import { computed, onMounted, ref, useTemplateRef } from "vue";
+import { TItem } from "../../shared";
+import { DraggableState } from "../../shared/draggable";
 import ItemPreview from "../ItemPreview.vue";
 
 const props = defineProps<{

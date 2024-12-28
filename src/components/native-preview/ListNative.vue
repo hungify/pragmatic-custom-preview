@@ -5,9 +5,12 @@ import {
 } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { onMounted, useTemplateRef } from "vue";
+import { onMounted, onUnmounted, useTemplateRef } from "vue";
 import { TItem } from "../../shared";
 import ItemNative from "./ItemNative.vue";
+import { CleanupFn } from "@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types";
+
+let cleanup: CleanupFn | null = null;
 
 const scrollableRef = useTemplateRef("listRef");
 const props = defineProps<{
@@ -31,7 +34,7 @@ onMounted(() => {
     return;
   }
 
-  combine(
+  cleanup = combine(
     autoScrollForElements({
       element: scrollableRef.value,
     }),
@@ -64,6 +67,10 @@ onMounted(() => {
       },
     })
   );
+});
+
+onUnmounted(() => {
+  cleanup?.();
 });
 </script>
 
