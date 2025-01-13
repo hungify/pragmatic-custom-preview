@@ -12,9 +12,10 @@ import {
 import { preserveOffsetOnSource } from "@atlaskit/pragmatic-drag-and-drop/element/preserve-offset-on-source";
 import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
 import { Box } from "@atlaskit/primitives";
-import { DraggableState, TItem } from "../../shared";
+import { TItem } from "../../shared";
 import { cardStateStyles, cardStyles, pinnedStyles } from "../../shared/style";
 import CardPreview from "../Preview";
+import { DraggableState } from "../../shared/draggable";
 
 type PreviewState = {
   rect: DOMRect;

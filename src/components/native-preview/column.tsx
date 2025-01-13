@@ -12,7 +12,7 @@ import {
 import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { TItem } from "../../shared";
 import { columnScrollStyles, columnStyles } from "../../shared/style";
-import CardNative from "./Card";
+import CardNative from "./card";
 
 interface ColumnNativeProps {
   columns: TItem[];
@@ -43,10 +43,8 @@ export default function ColumnNative({
       monitorForElements({
         onDrop({ source, location }) {
           const target = location.current.dropTargets[0];
+          if (!target) return;
 
-          if (!target) {
-            return;
-          }
           const sourceItem = source.data.item as TItem;
           const destinationItem = target.data.item as TItem;
 

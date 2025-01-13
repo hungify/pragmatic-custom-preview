@@ -13,7 +13,7 @@ import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/ad
 import { preventUnhandled } from "@atlaskit/pragmatic-drag-and-drop/prevent-unhandled";
 import { TItem } from "../../shared";
 import { columnScrollStyles, columnStyles } from "../../shared/style";
-import CardCustom from "./Card";
+import CardCustom from "./card";
 
 interface ColumnCustomProps {
   columns: TItem[];
