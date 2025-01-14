@@ -1,9 +1,9 @@
 import { Box, Text, xcss } from "@atlaskit/primitives";
 import { useState } from "react";
 import { getColumns } from "./utils";
-import ColumnCustom from "./components/custom-preview/Column";
+import ColumnCustom from "./components/custom-preview/column";
 import Header from "./components/Header";
-import ColumnNative from "./components/native-preview/Column";
+import ColumnNative from "./components/native-preview/column";
 
 const columnContainerStyles = xcss({
   width: "100%",

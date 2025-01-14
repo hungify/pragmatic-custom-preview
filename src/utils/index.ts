@@ -1,4 +1,10 @@
 import { TItem } from "../shared";
+import battery from "../assets/images/battery.png";
+import drill from "../assets/images/drill.png";
+import wallet from "../assets/images/wallet.png";
+import yeti from "../assets/images/yeti.png";
+import ui from "../assets/images/ui.png";
+import koala from "../assets/images/koala.png";
 
 export function isRectangleColliding({
   fixedRect,
@@ -22,12 +28,16 @@ export function getColumns({
   count: number;
   prefix: string;
 }): TItem[] {
+  const nameUrls = [battery, drill, wallet, yeti, ui, koala];
+
   const items = Array.from({ length: count }, (_, itemIndex) => {
+    const randomNameUrl = nameUrls[Math.floor(Math.random() * nameUrls.length)];
+
     return {
       id: `${prefix}-${itemIndex}`,
       title: `${prefix} ${itemIndex}`,
       pinned: itemIndex % 2 === 0,
-      image: `https://placehold.co/40x40?text=${prefix}-${itemIndex}`,
+      image: randomNameUrl,
     };
   });
   return items;
