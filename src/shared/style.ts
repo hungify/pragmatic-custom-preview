@@ -1,7 +1,7 @@
 import { easeInOut } from "@atlaskit/motion";
 import { smallDurationMs } from "@atlaskit/motion/durations";
 import { xcss } from "@atlaskit/primitives";
-import { DraggableState } from ".";
+import { DraggableState } from "./draggable";
 
 export const cardStyles = xcss({
   borderWidth: "border.width",

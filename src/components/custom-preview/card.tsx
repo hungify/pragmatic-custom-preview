@@ -2,12 +2,7 @@ import { Fragment, useRef } from "react";
 import { Box } from "@atlaskit/primitives";
 import { createPortal } from "react-dom";
 import { TItem } from "../../shared";
-import {
-  cardStyles,
-  cardStateStyles,
-  pinnedStyles,
-  previewStyles,
-} from "../../shared/style";
+import { cardStyles, cardStateStyles, pinnedStyles } from "../../shared/style";
 import { useDraggable } from "../../hooks/useDraggable";
 import Image from "@atlaskit/image";
 import CardPreview from "../Preview";
@@ -55,10 +50,7 @@ export default function CardCustom({
 
       {preview &&
         createPortal(
-          <Box
-            ref={previewElement}
-            style={previewStyles(preview) as React.CSSProperties}
-          >
+          <Box ref={previewElement}>
             <CardPreview item={item} showImage={showImage} />
           </Box>,
           document.body

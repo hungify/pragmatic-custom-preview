@@ -1,6 +1,7 @@
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import type {
   AllDragTypes,
+  BaseEventPayload,
   DropTargetGetFeedbackArgs,
   ElementDragType,
   Input,
@@ -18,41 +19,27 @@ import {
   useRef,
   useState,
 } from "react";
-import { DraggableState } from "../shared";
+import {
+  DraggableGetFeedbackArgs,
+  DraggableOffset,
+  DraggablePreview,
+  DraggableState,
+} from "../shared/draggable";
+import { previewStyles } from "../shared/style";
 
-// Lib doesn't export these types, so we need to define them ourselves
-type DraggableGetFeedbackArgs = {
-  /**
-   * The user input as a drag is trying to start (the `initial` input)
-   */
-  input: Input;
-  /**
-   * The `draggable` element
-   */
-  element: HTMLElement;
-  /**
-   * The `dragHandle` element for the `draggable`
-   */
-  dragHandle: Element | null;
-};
-interface DraggablePreview {
-  element: HTMLElement;
-  bounds: DOMRect;
-}
-
-interface DraggableOffset {
-  x: number;
-  y: number;
-}
-interface DraggableOptions<TElement extends HTMLElement> {
+interface DraggableOptions<
+  TElement extends HTMLElement,
+  TDragType extends AllDragTypes = ElementDragType
+> {
   element: RefObject<TElement>;
   canDrag?: (args: DraggableGetFeedbackArgs) => boolean;
-  canDrop?: (args: DropTargetGetFeedbackArgs<ElementDragType>) => boolean;
+  canDrop?: (args: DropTargetGetFeedbackArgs<TDragType>) => boolean;
   handle?: Element;
   getInitialData?: (args: DraggableGetFeedbackArgs) => Record<string, unknown>;
   getData?: (
-    args: DropTargetGetFeedbackArgs<AllDragTypes>
+    args: DropTargetGetFeedbackArgs<TDragType>
   ) => Record<string | symbol, unknown>;
+  onDragLeave?: (args: BaseEventPayload<TDragType>) => void;
 }
 
 export const useDraggable = <TElement extends HTMLElement>(
@@ -75,7 +62,7 @@ export const useDraggable = <TElement extends HTMLElement>(
     const element = options.element.current;
     if (!element) return;
 
-    const cleanup = combine(
+    return combine(
       draggable({
         element,
         getInitialData: options.getInitialData,
@@ -83,7 +70,6 @@ export const useDraggable = <TElement extends HTMLElement>(
         onDragStart: ({ location }) => {
           setState("dragging");
           const { input } = location.current;
-
           const bounds = element.getBoundingClientRect();
           setOffset({
             x: input.clientX - bounds.left,
@@ -93,7 +79,8 @@ export const useDraggable = <TElement extends HTMLElement>(
         },
         onDrag: ({ location }) => {
           setState("dragging");
-          setPointer(location.current.input);
+          const { input } = location.current;
+          setPointer(input);
         },
         onDrop: () => {
           setState("idle");
@@ -101,12 +88,8 @@ export const useDraggable = <TElement extends HTMLElement>(
         },
         onGenerateDragPreview: ({ source, nativeSetDragImage }) => {
           disableNativeDragPreview({ nativeSetDragImage });
-
           const bounds = source.element.getBoundingClientRect();
-          if (!bounds) return;
-
           setPreview({
-            element: source.element,
             bounds,
           });
         },
@@ -120,9 +103,18 @@ export const useDraggable = <TElement extends HTMLElement>(
         onDrop: () => setState("idle"),
       })
     );
-
-    return () => cleanup();
   }, [options, resetDraggable]);
+
+  useLayoutEffect(() => {
+    if (!previewElement.current || !preview) return;
+
+    Object.assign(
+      previewElement.current.style,
+      previewStyles({
+        bounds: preview.bounds,
+      })
+    );
+  }, [previewElement, pointer, offset, preview]);
 
   useLayoutEffect(() => {
     const element = previewElement.current;
