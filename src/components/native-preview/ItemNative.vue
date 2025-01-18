@@ -112,7 +112,6 @@ onMounted(() => {
 }
 
 .grid-item {
-  height: 40px;
   border-width: 2px;
   border-color: #6b4ce6;
   border-style: solid;
@@ -146,5 +145,7 @@ onMounted(() => {
   border-radius: 50%;
   /* Workaround to make `image` not draggable. */
   pointer-events: none;
+  max-height: 100%;
+  width: 100%;
 }
 </style>

@@ -182,7 +182,6 @@ export const useDraggable = <TElement extends HTMLElement>(
                           (attr) => [attr.name, attr.value]
                         )
                       ),
-                      innerHTML: draggedElement.value.innerHTML,
                     }),
               ])
             )

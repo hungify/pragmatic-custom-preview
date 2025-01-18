@@ -37,5 +37,7 @@ const props = defineProps<{
   border-radius: 50%;
   /* Workaround to make `image` not draggable. */
   pointer-events: none;
+  max-height: 100%;
+  width: 100%;
 }
 </style>
