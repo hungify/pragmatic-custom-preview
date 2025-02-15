@@ -71,7 +71,10 @@ export default function CardNative({
       }),
       dropTargetForElements({
         element,
-        getData: () => item,
+        getData: () => ({
+          item,
+          instanceId,
+        }),
         canDrop: ({ source }) => {
           if (source.element === itemRef.current) return false;
           return !item.pinned && source.data.instanceId === instanceId;

@@ -29,16 +29,20 @@ export default function ColumnNative({
   setColumns,
   showImage,
 }: ColumnNativeProps) {
-  const ref = useRef<HTMLDivElement | null>(null);
+  const listRef = useRef<HTMLDivElement | null>(null);
+
+  const isScrollMode = scrollMode === "list";
 
   useEffect(() => {
-    const element = ref.current;
+    const element = listRef.current;
     invariant(element);
 
     return combine(
-      autoScrollForElements({
-        element,
-      }),
+      isScrollMode
+        ? autoScrollForElements({
+            element,
+          })
+        : () => {},
       autoScrollWindowForElements(),
       monitorForElements({
         onDrop({ source, location }) {
@@ -69,11 +73,11 @@ export default function ColumnNative({
         },
       })
     );
-  }, [columns, setColumns]);
+  }, [columns, isScrollMode, setColumns]);
 
   return (
     <Box
-      ref={ref}
+      ref={listRef}
       xcss={[columnStyles, scrollMode === "list" && columnScrollStyles]}
       padding="space.200"
     >

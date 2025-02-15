@@ -33,14 +33,18 @@ export default function ColumnCustom({
 }: ColumnCustomProps) {
   const listRef = useRef<HTMLDivElement | null>(null);
 
+  const isScrollMode = scrollMode === "list";
+
   useEffect(() => {
     const element = listRef.current;
     invariant(element);
 
     return combine(
-      autoScrollForElements({
-        element,
-      }),
+      isScrollMode
+        ? autoScrollForElements({
+            element,
+          })
+        : () => {},
       autoScrollWindowForElements(),
       monitorForElements({
         onDrop({ source, location }) {
@@ -75,7 +79,7 @@ export default function ColumnCustom({
         },
       })
     );
-  }, [columns, setColumns]);
+  }, [columns, isScrollMode, setColumns]);
 
   return (
     <Box
