@@ -1,6 +1,5 @@
-import { easeInOut } from "@atlaskit/motion";
-import { smallDurationMs } from "@atlaskit/motion/durations";
 import { xcss } from "@atlaskit/primitives";
+import { durations, easeInOut } from "@atlaskit/motion";
 import { DraggableState } from "./draggable";
 
 export const cardStyles = xcss({
@@ -10,7 +9,7 @@ export const cardStyles = xcss({
   backgroundColor: "color.background.accent.purple.subtler",
   borderRadius: "border.radius",
   transitionProperty: "background-color, opacity",
-  transition: `all ${smallDurationMs}ms ${easeInOut}`,
+  transition: `all ${durations.small}ms ${easeInOut}`,
   transitionTimingFunction: easeInOut,
 
   display: "flex",

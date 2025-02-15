@@ -31,7 +31,7 @@ interface DraggableOptions<
   TElement extends HTMLElement,
   TDragType extends AllDragTypes = ElementDragType
 > {
-  element: RefObject<TElement>;
+  element: RefObject<TElement | null>;
   canDrag?: (args: DraggableGetFeedbackArgs) => boolean;
   canDrop?: (args: DropTargetGetFeedbackArgs<TDragType>) => boolean;
   handle?: Element;
